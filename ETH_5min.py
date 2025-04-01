@@ -1,5 +1,4 @@
-# 필요한 라이브러리 설치 (없으면 설치)
-# !pip install numpy pandas matplotlib sklearn tensorflow
+# python3 -m pip install pandas numpy tensorflow scikit-learn matplotlib
 
 import numpy as np
 import pandas as pd
@@ -42,9 +41,13 @@ model.summary()
 # 모델 학습 (정상적인 데이터로만 학습한다고 가정)
 model.fit(sequences, sequences, epochs=50, batch_size=64, validation_split=0.1)
 
+# ✅ 학습 완료 후 모델 저장
+model.save('eth_5min_autoencoder.h5')
+print("✅ 모델이 저장되었습니다: eth_5min_autoencoder.h5")
+
 # 이상탐지 점수 계산 (복원 오차)
 reconstructed = model.predict(sequences)
-train_loss = np.mean(np.square(sequences - reconstructed), axis=(1,2))
+train_loss = np.mean(np.square(sequences - reconstructed), axis=(1, 2))
 
 # 복원오차 시각화 (이상 거래는 복원 오차가 클 것으로 예상)
 plt.figure(figsize=(12,6))
@@ -56,7 +59,7 @@ plt.legend()
 plt.show()
 
 # 이상거래 임계값 설정 예시 (평균 + 3 표준편차)
-thresh = np.mean(train_loss) + 3*np.std(train_loss)
+thresh = np.mean(train_loss) + 3 * np.std(train_loss)
 print(f'이상 탐지 임계값: {thresh}')
 
 # 이상치 탐지된 인덱스 출력
